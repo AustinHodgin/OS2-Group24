@@ -1,0 +1,122 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{titling}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{textheight=9.25in, textwidth=6.75in} % 0.75" margins
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{cite}
+
+\def\name{Group 26}
+
+
+\title{Homework 3\\\large CS444 Spring 2018 }
+\author{Austin Hodgin, Joshua Novak, Trent Vasquez}
+\date{\today}
+
+\begin{document}
+
+	% Title page
+	\begin{titlingpage}
+		\maketitle
+		\begin{abstract}
+			\noindent Assignment 4 involved editing the current slob allocator for the linux yocto kernel to use the best
+			fit algorithm to look at the difference between fragmentation rates between the first fit algorithm for slob which 
+			is the default option for this kernel and the best fit algorithm that we implemented. 
+		\end{abstract}
+	\end{titlingpage}
+
+
+	% Document body
+	\section*{Design}
+	For this assignment we looked online to find what the best fit algorithm is and how we can implement it into our system.
+	After doing this research and learning what it is we decided that we are going to implement it by having it linearly scanning the blocks and 
+	the pages looking for the chunk of memory that best fits what it is trying to store in it with as little wast as possible. This is very diffrent from 
+	the default way it is done using slob. Slob does this by implementing the first fit model. This scans the blocks and pages and puts it in the 
+	first place it fits with no regard to how large that block or page is.  
+	
+	\section*{Questions}
+	\subsection*{1. What do you think the main point of this assignment is?}
+	\noindent The main point of this assignment was to learn how to write system calls and to continue to learn 
+	skills in regards kernel programing. We believe the main in point of this was to give us an understanding how
+	to implement different storage algorithm and how they can affect the different levels fragmentation in memory from 
+	the slob algorithm and the best fit algorithm. 
+
+	\subsection*{2. How did you personally approach the problem? Design decisions, algorithm, etc.}
+	\noindent The approach that our team went with for dealing with the problem is to make sure that the kernel was using 
+	the default slob allocator. After that we modified the slob.c file to  include two different system calls and fixed any errors that 
+	came from that. We then went on to rebuild the full kernel and wrote a kernel module to test to the  slop allocator by having the moduel 
+	call kmalloc and kree. The kmalloc interface is built with the slob allocator and the simplest way to test is to
+	calling kmalloc and kfree in a loop. After that we then wrote a program that would give us the fragmentation rates for both 
+	the default and then try and implement the best fit algorithm and then test that with the same script. 
+
+
+	\subsection*{3. How did you ensure your solution was correct? Testing details, for instance.}
+	\noindent below are the steps and commands that we used to make sure our solution was correct as well as the 
+	out put of the program that we wrote for testing the memory allocation for both first-fit and best-fit. 
+
+
+	\begin{itemize}
+
+	\item Source Environment:
+		\begin{lstlisting}
+		Source /scratch/files/environment-setup-i586-poky-linux.csh
+		\end{lstlisting}
+	
+	\item Clean and build kernel: 
+		\begin{lstlisting}
+		cd linux-yocto-3.19
+		make clean && make -j4 all
+		\end{lstlisting}
+
+	\item Run qemu using the command below to enable networking and file transfers this is all on one line:
+		\begin{lstlisting}
+		qemu-system-i386 -redir tcp:5524::22 -nographic 
+		-kernel linux-yocto-3.19/arch/x86/boot/bzImage 
+		-drive file=core-image-lsb-sdk-qemux86.ext4 
+		-enable-kvm -usb -localtime --no-reboot 
+		--append ``root=/dev/hda rwconsole=ttyS0 debug``
+		\end{lstlisting}
+\end{itemize}
+
+	\noindent First Fit:
+	\begin{itemize}
+	\item 
+		\begin{lstlisting}
+
+		\end{lstlisting}
+	\end{itemize}
+
+	\nodindent Best Fit:
+
+	\begin{itemize}
+	\item 
+		\begin{lstlisting}
+
+		\end{lstlisting}
+	\end{itemize}
+
+
+	\includegraphics[width=\linewidth]{BF.png}
+	\includegraphics[width=\linewidth]{FF.png}
+
+	\subsection*{4. What did you learn?}
+	This assignment taught us how to write system calls, understand the slob allocator as an interface as well as how memory 
+	is allocated in general operations. After hours of research and trail and error we wer able to implement the best fit algorithm for the slob allocator that was the 
+	base option. 
+	
+
+\begin{center}
+\section*{Work Log}
+\noindent 06/03/2018 Joshua worked on planing and overview of the assignment for 1-2 hours
+\noindent 06/03/2018 Austin and Joshua worked on the main program and writeup for 4 hours 
+\end{center}
+
+\section*{Version control log}
+
+
+\bibliography{ref}
+\bibliographystyle{IEEEtran}
+
+\end{document}
